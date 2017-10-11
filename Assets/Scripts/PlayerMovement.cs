@@ -3,12 +3,12 @@
 public sealed class PlayerMovement : MonoBehaviour
 {
 	public Rigidbody2D playerRigidbody;
-	public PhysicsMaterial2D standingMaterial;
-	public PhysicsMaterial2D movingMaterial;
 
-	public float moveSpeed = 1.0f;
+	public float moveAcceleration = 1.0f;
 	public float maxHorizontalVelocity = 10.0f;
 	public float jumpImpulse = 10.0f;
+
+	public float frictionVelocity = 1.0f;
 
 	private void Update()
 	{
@@ -22,17 +22,23 @@ public sealed class PlayerMovement : MonoBehaviour
 
 		if( Mathf.Abs( moveInput ) > Mathf.Epsilon )
 		{
-			if( Mathf.Abs( playerRigidbody.velocity.x ) < maxHorizontalVelocity )
+			if( Mathf.Sign( moveInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
 			{
-				float move = moveInput * moveSpeed;
+				float move = moveInput * moveAcceleration;
 				playerRigidbody.AddForce( new Vector2( move, 0.0f ), ForceMode2D.Force );
 			}
-
-			playerRigidbody.sharedMaterial = movingMaterial;
 		}
-		else
+	}
+
+	private void OnCollisionStay2D( Collision2D collision )
+	{
+		float moveInput = Input.GetAxis( "Horizontal" );
+
+		if( Mathf.Abs( moveInput ) < Mathf.Epsilon )
 		{
-			playerRigidbody.sharedMaterial = standingMaterial;
+			Vector2 vel = playerRigidbody.velocity;
+			vel.x *= frictionVelocity * Time.deltaTime;
+			playerRigidbody.velocity = vel;
 		}
 	}
 }
