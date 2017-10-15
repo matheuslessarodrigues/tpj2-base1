@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class PlayerMovement : MonoBehaviour
+public sealed class PlayerController : MonoBehaviour
 {
 	public Rigidbody2D playerRigidbody;
 
@@ -18,13 +18,13 @@ public sealed class PlayerMovement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		float moveInput = Input.GetAxis( "Horizontal" );
+		float horizontalInput = Input.GetAxis( "Horizontal" );
 
-		if( Mathf.Abs( moveInput ) > Mathf.Epsilon )
+		if( Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
 		{
-			if( Mathf.Sign( moveInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
+			if( Mathf.Sign( horizontalInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
 			{
-				float move = moveInput * moveAcceleration;
+				float move = horizontalInput * moveAcceleration;
 				playerRigidbody.AddForce( new Vector2( move, 0.0f ), ForceMode2D.Force );
 			}
 		}

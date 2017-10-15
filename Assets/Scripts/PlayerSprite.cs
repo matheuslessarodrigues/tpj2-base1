@@ -2,7 +2,7 @@
 
 public sealed class PlayerSprite : MonoBehaviour
 {
-	public PlayerMovement playerMovement;
+	public PlayerController controller;
 	public SpriteRenderer spriteRenderer;
 	public Animator playerAnimator;
 
@@ -10,19 +10,14 @@ public sealed class PlayerSprite : MonoBehaviour
 	public string movingAnimationParam = "Moving";
 
 	public float groundCheckHeight = 1.0f;
-	public bool debugIsMoving;
-	public float debugX;
 
 	private void Update()
 	{
-		float horizontalVelocity = playerMovement.playerRigidbody.velocity.x;
+		float horizontalVelocity = controller.playerRigidbody.velocity.x;
 		bool isMoving = Mathf.Abs( horizontalVelocity ) > 0.001f;
 
 		if( isMoving )
 			spriteRenderer.flipX = horizontalVelocity < 0.0f;
-
-		debugIsMoving = isMoving;
-		debugX = horizontalVelocity;
 
 		playerAnimator.SetBool( movingAnimationParam, isMoving );
 
