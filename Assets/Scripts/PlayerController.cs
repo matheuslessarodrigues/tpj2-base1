@@ -10,17 +10,28 @@ public sealed class PlayerController : MonoBehaviour
 
 	public float frictionVelocity = 1.0f;
 
+	public float groundCheckHeight = 1.0f;
+
+	[System.NonSerialized]
+	public bool isGrounded;
+	[System.NonSerialized]
+	public bool isDucking;
+
 	private void Update()
 	{
-		if( Input.GetButtonDown( "Jump" ) )
+		if( isGrounded && Input.GetButtonDown( "Jump" ) )
 			playerRigidbody.AddForce( new Vector2( 0.0f, jumpImpulse ), ForceMode2D.Impulse );
+
+		isDucking = isGrounded && Input.GetAxisRaw( "Vertical" ) < -0.5f;
 	}
 
 	private void FixedUpdate()
 	{
-		float horizontalInput = Input.GetAxis( "Horizontal" );
+		int layerMask = LayerMask.GetMask( "Environment" );
+		isGrounded = Physics2D.Raycast( transform.position + Vector3.up, Vector2.down, groundCheckHeight, layerMask ).collider != null;
 
-		if( Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
+		float horizontalInput = Input.GetAxis( "Horizontal" );
+		if( !isDucking && Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
 		{
 			if( Mathf.Sign( horizontalInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
 			{
@@ -32,13 +43,17 @@ public sealed class PlayerController : MonoBehaviour
 
 	private void OnCollisionStay2D( Collision2D collision )
 	{
-		float moveInput = Input.GetAxis( "Horizontal" );
-
-		if( Mathf.Abs( moveInput ) < Mathf.Epsilon )
+		float horizontalInput = Input.GetAxis( "Horizontal" );
+		if( isDucking || Mathf.Abs( horizontalInput ) < Mathf.Epsilon )
 		{
 			Vector2 vel = playerRigidbody.velocity;
 			vel.x *= frictionVelocity * Time.deltaTime;
 			playerRigidbody.velocity = vel;
 		}
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.DrawRay( transform.position + Vector3.up, Vector2.down * groundCheckHeight );
 	}
 }
