@@ -22,3 +22,8 @@ Lembra daquele _pattern_ de _commands_? Então, #fikdik
 ## Links Maneros
 
 - http://gameprogrammingpatterns.com/command.html
+
+## Logística
+
+- Grupos de 2 ou 3
+- Enviar link do repositori por: https://goo.gl/forms/zkkwcGNANqPT4iLd2
