@@ -24,7 +24,7 @@ public sealed class PlayerController : MonoBehaviour
 
 	private void Update()
 	{
-		isDucking = isGrounded && Input.GetAxisRaw( "Vertical" ) < -0.5f;
+		isDucking = isGrounded && Input.GetKey( KeyCode.DownArrow );
 	}
 
 	private void FixedUpdate()
@@ -32,7 +32,10 @@ public sealed class PlayerController : MonoBehaviour
 		int layerMask = LayerMask.GetMask( "Environment" );
 		isGrounded = Physics2D.Raycast( transform.position + Vector3.up, Vector2.down, groundCheckHeight, layerMask ).collider != null;
 
-		float horizontalInput = Input.GetAxis( "Horizontal" );
+        float horizontalInput = 0.0f;
+        horizontalInput += Input.GetKey(KeyCode.LeftArrow) ? -1.0f : 0.0f;
+        horizontalInput += Input.GetKey(KeyCode.RightArrow) ? 1.0f : 0.0f;
+        
 		if( !isDucking && !isStunned && Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
 		{
 			if( Mathf.Sign( horizontalInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
@@ -47,8 +50,11 @@ public sealed class PlayerController : MonoBehaviour
 	{
 		if( collision.gameObject.layer == LayerMask.NameToLayer( "Environment" ) )
 		{
-			float horizontalInput = Input.GetAxis( "Horizontal" );
-			if( !isStunned && ( isDucking || Mathf.Abs( horizontalInput ) < Mathf.Epsilon ) )
+            float horizontalInput = 0.0f;
+            horizontalInput += Input.GetKey(KeyCode.LeftArrow) ? -1.0f : 0.0f;
+            horizontalInput += Input.GetKey(KeyCode.RightArrow) ? 1.0f : 0.0f;
+
+            if ( !isStunned && ( isDucking || Mathf.Abs( horizontalInput ) < Mathf.Epsilon ) )
 			{
 				Vector2 vel = playerRigidbody.velocity;
 				vel.x *= frictionVelocity * Time.deltaTime;

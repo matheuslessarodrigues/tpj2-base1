@@ -8,7 +8,7 @@ public sealed class PlayerJump : MonoBehaviour
 
     private void Update()
     {
-        if (controller.isGrounded && !controller.isStunned && Input.GetButtonDown("Jump"))
+        if (controller.isGrounded && !controller.isStunned && Input.GetKeyDown(KeyCode.Space))
             controller.playerRigidbody.AddForce(new Vector2(0.0f, jumpImpulse), ForceMode2D.Impulse);
     }
 }
