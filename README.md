@@ -22,6 +22,8 @@ Lembra daquele _pattern_ de _commands_? Então, #fikdik
   - `W` e `Espaço` fazem o personagem pular
 - **Também** usar [essa biblioteca](https://github.com/JISyed/Unity-XboxCtrlrInput) pra pegar input do controle de XBox
   - https://github.com/JISyed/Unity-XboxCtrlrInput
+- Teclado e Gamepad funcionam juntos
+  - Tanto faz apertar `Espaço` ou o `X` do controle
 - Fazer o controle tremer quando o personagem leva hit
   - Só da pra fazer usando bibliotecas externas de input (tipo essa de cima)
 
