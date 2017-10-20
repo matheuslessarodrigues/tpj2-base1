@@ -9,6 +9,7 @@ public sealed class PlayerSprite : MonoBehaviour
 	public string onAirAnimationParam = "OnAir";
 	public string movingAnimationParam = "Moving";
 	public string duckingAnimationParam = "Duck";
+	public string stunAnimationParam = "Hit";
 
 	private void Update()
 	{
@@ -21,5 +22,6 @@ public sealed class PlayerSprite : MonoBehaviour
 		playerAnimator.SetBool( movingAnimationParam, isMoving );
 		playerAnimator.SetBool( onAirAnimationParam, !controller.isGrounded );
 		playerAnimator.SetBool( duckingAnimationParam, controller.isDucking );
+		playerAnimator.SetBool( stunAnimationParam, controller.isStunned );
 	}
 }

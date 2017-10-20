@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public sealed class PlayerController : MonoBehaviour
 {
@@ -12,14 +13,19 @@ public sealed class PlayerController : MonoBehaviour
 
 	public float groundCheckHeight = 1.0f;
 
+	public float stunTime = 1.0f;
+	public float stunImpulse = 10.0f;
+
 	[System.NonSerialized]
 	public bool isGrounded;
 	[System.NonSerialized]
 	public bool isDucking;
+	[System.NonSerialized]
+	public bool isStunned;
 
 	private void Update()
 	{
-		if( isGrounded && Input.GetButtonDown( "Jump" ) )
+		if( isGrounded && !isStunned && Input.GetButtonDown( "Jump" ) )
 			playerRigidbody.AddForce( new Vector2( 0.0f, jumpImpulse ), ForceMode2D.Impulse );
 
 		isDucking = isGrounded && Input.GetAxisRaw( "Vertical" ) < -0.5f;
@@ -31,7 +37,7 @@ public sealed class PlayerController : MonoBehaviour
 		isGrounded = Physics2D.Raycast( transform.position + Vector3.up, Vector2.down, groundCheckHeight, layerMask ).collider != null;
 
 		float horizontalInput = Input.GetAxis( "Horizontal" );
-		if( !isDucking && Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
+		if( !isDucking && !isStunned && Mathf.Abs( horizontalInput ) > Mathf.Epsilon )
 		{
 			if( Mathf.Sign( horizontalInput ) * playerRigidbody.velocity.x < maxHorizontalVelocity )
 			{
@@ -43,13 +49,35 @@ public sealed class PlayerController : MonoBehaviour
 
 	private void OnCollisionStay2D( Collision2D collision )
 	{
-		float horizontalInput = Input.GetAxis( "Horizontal" );
-		if( isDucking || Mathf.Abs( horizontalInput ) < Mathf.Epsilon )
+		if( collision.gameObject.layer == LayerMask.NameToLayer( "Environment" ) )
 		{
-			Vector2 vel = playerRigidbody.velocity;
-			vel.x *= frictionVelocity * Time.deltaTime;
-			playerRigidbody.velocity = vel;
+			float horizontalInput = Input.GetAxis( "Horizontal" );
+			if( !isStunned && ( isDucking || Mathf.Abs( horizontalInput ) < Mathf.Epsilon ) )
+			{
+				Vector2 vel = playerRigidbody.velocity;
+				vel.x *= frictionVelocity * Time.deltaTime;
+				playerRigidbody.velocity = vel;
+			}
 		}
+	}
+
+	private void OnCollisionEnter2D( Collision2D collision )
+	{
+		if( collision.gameObject.layer == LayerMask.NameToLayer( "Enemy" ) )
+		{
+			if( !isStunned )
+			{
+				playerRigidbody.AddForce( collision.contacts[0].normal * stunImpulse, ForceMode2D.Impulse );
+				StartCoroutine( StunCoroutine() );
+			}
+		}
+	}
+
+	private IEnumerator StunCoroutine()
+	{
+		isStunned = true;
+		yield return new WaitForSeconds( stunTime );
+		isStunned = false;
 	}
 
 	private void OnDrawGizmos()
