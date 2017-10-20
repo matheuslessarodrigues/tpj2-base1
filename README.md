@@ -18,6 +18,12 @@ Lembra daquele _pattern_ de _commands_? Então, #fikdik
 ## Extras
 
 - Suporte a _gamepad_.
+- Mais de uma tecla pra fazer a mesma função
+  - `W` e `Espaço` fazem o personagem pular
+- **Também** usar [essa biblioteca](https://github.com/JISyed/Unity-XboxCtrlrInput) pra pegar input do controle de XBox
+  - https://github.com/JISyed/Unity-XboxCtrlrInput
+- Fazer o controle tremer quando o personagem leva hit
+  - Só da pra fazer usando bibliotecas externas de input (tipo essa de cima)
 
 ## Links Maneros
 
