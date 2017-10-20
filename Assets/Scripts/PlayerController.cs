@@ -7,7 +7,6 @@ public sealed class PlayerController : MonoBehaviour
 
 	public float moveAcceleration = 1.0f;
 	public float maxHorizontalVelocity = 10.0f;
-	public float jumpImpulse = 10.0f;
 
 	public float frictionVelocity = 1.0f;
 
@@ -25,9 +24,6 @@ public sealed class PlayerController : MonoBehaviour
 
 	private void Update()
 	{
-		if( isGrounded && !isStunned && Input.GetButtonDown( "Jump" ) )
-			playerRigidbody.AddForce( new Vector2( 0.0f, jumpImpulse ), ForceMode2D.Impulse );
-
 		isDucking = isGrounded && Input.GetAxisRaw( "Vertical" ) < -0.5f;
 	}
 
