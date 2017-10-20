@@ -4,7 +4,19 @@ Implementar _keybind_ em um jogo tosquinho.
 
 Deverá ser possível mudar, pelo inspector da unity, as teclas de ação do player **antes** do _play_.
 
-Lembra daquele _pattern_ de _commands_? Então, #fikdik
+Todas as definições de teclas devem ficar em um único script!
+
+DICA: experimenta criar funções nesse script para cada ação do player.
+
+Exemplo:
+```csharp
+public UnityEngine.KeyCode jumpKeyCode;
+
+public bool GetJump()
+{
+  return UnityEngine.Input.GetKeyDown( jumpKeyCode );
+}
+```
 
 **NÃO PRECISA MUDAR AS TECLAS ENQUANTO A UNITY TÁ EM _PLAY_!**
 
@@ -26,10 +38,6 @@ Lembra daquele _pattern_ de _commands_? Então, #fikdik
   - Tanto faz apertar `Espaço` ou o `X` do controle
 - Fazer o controle tremer quando o personagem leva hit
   - Só da pra fazer usando bibliotecas externas de input (tipo essa de cima)
-
-## Links Maneros
-
-- http://gameprogrammingpatterns.com/command.html
 
 ## Logística
 
